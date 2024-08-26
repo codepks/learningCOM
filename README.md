@@ -184,3 +184,15 @@ Explaination
 5. **raw_interfaces:** This instructs the compiler to generate raw interface definitions rather than smart pointers or other wrappers.
   - Raw interfaces allow for more direct access to the underlying COM methods but require careful handling of reference counting and memory management.
   - This can be useful for performance-critical sections of code or when working directly with lower-level COM APIs.
+
+## Optional way of CoCreateInstance
+way 1
+```
+roFactory.CoCreateInstance(CLSID_SpResFlyHeightFactory);
+```
+way 2
+```
+hr = pROFactory.CoCreateInstance(L"SPX.FlyHeight.ROFactory");
+```
+
+Instead of using CLSID we can use registered Prog-id as progId is the class name with which the COM object is registered
