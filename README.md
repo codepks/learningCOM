@@ -196,3 +196,9 @@ hr = pROFactory.CoCreateInstance(L"SPX.FlyHeight.ROFactory");
 ```
 
 Instead of using CLSID we can use registered Prog-id as progId is the class name with which the COM object is registered
+
+# Genearating .tlb
+To gnerate the .tlb file from the given .dll file we use this :
+```
+"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\x64\TlbExp.exe" /nologo ^ $(NGS_BIN)\$(ProjectName).dll ^ \out:$(NGS_BIN)\$(ProjectName).tlb
+```
