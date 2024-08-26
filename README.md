@@ -168,3 +168,19 @@ roFactory.CoCreateInstance(CLSID_SPResCalibDFNormFactory);
 2. Mention the .tlb file in the common.h file
 Use CComPtr and ATL libraries to 
 
+## importing
+```
+#import "SPResFlyHeight.tlb" no_namespace ,named_guids,raw_interfaces_only
+```
+Explaination
+1. **#import** :  This preprocessor directive is used to import a type library (TLB) that contains definitions for COM interfaces, enums, and structures. It allows the C++ compiler to generate header files and implement classes that map to COM interfaces defined in the TLB.
+2. "SPResFlyHeight.tlb" : This specifies the path to the Type Library file that you want to import. In this case, it's a file named SPResFlyHeight.tlb. Type Libraries usually contain metadata about the COM components, such as the definitions of interfaces, classes, and their methods.
+3. **no_namespace:** This option tells the compiler not to place the imported classes, interfaces, and enums into a namespace.
+ - By default, #import would create a specific namespace based on the project name or the library name.
+ - However, using no_namespace means that the identifiers will be placed directly into the global namespace, allowing you to use them without needing to qualify them with a namespace.
+4.** named_guids:** 
+- This option generates named GUIDs for the COM interfaces and classes.
+- Normally, the GUIDs are accessible via their structured representations like IID_IComResFlyHeight, but named_guids creates symbolic constants that can be used in your code more readably, such as CLSID_SpResFlyHeightFactory instead of needing to reference the GUID directly.
+5. **raw_interfaces:** This instructs the compiler to generate raw interface definitions rather than smart pointers or other wrappers.
+  - Raw interfaces allow for more direct access to the underlying COM methods but require careful handling of reference counting and memory management.
+  - This can be useful for performance-critical sections of code or when working directly with lower-level COM APIs.
