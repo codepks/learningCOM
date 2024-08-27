@@ -206,11 +206,11 @@ To gnerate the .tlb file from the given .dll file we use this :
 # Understanding COM Code
 ## Example 1
 ```
-  1. CComPtr<IComResFlyHeightFactory> pROFactory;
-  2. hr = pROFactory.CoCreateInstance(L"SPX.FlyHeight.ROFactory"); 
+  1. CComPtr<IComResFlyHeightFactory> pCOMROFactory;
+  2. hr = pCOMROFactory.CoCreateInstance(L"SPX.FlyHeight.ROFactory"); 
 
-  3. CComQIPtr<IComResFlyHeight> pFlyHeightRO;
-  4. pFlyHeightRO = pROFactory->CreateCOMRO(NULL, NULL);
+  3. CComQIPtr<IComResFlyHeight> pFlyHeightCOMRO;
+  4. pFlyHeightCOMRO = pCOMROFactory->CreateCOMRO(NULL, NULL);
 ```
 _Breaking the code_
 ```
@@ -251,3 +251,26 @@ _The above code is written for the below given c# code_
 ```
  3. CComQIPtr<IComResFlyHeight> pFlyHeightRO;
 ```
+_The above code is written for the below given c# code_
+```
+  [ComVisible(true)]
+  [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+  public interface IComResFlyHeight
+  {
+      void AddResult(double bicellTarget, double ecsPressureOFF, double flyHeightTarget);
+      ComFlyHeightConfigParams GetConfigParams();
+  }
+```
+
+```
+  4. pFlyHeightCOMRO = pCOMROFactory->CreateCOMRO(NULL, NULL);
+```
+_The above code is written for the below given c# code_
+```
+public Com.IComResFlyHeight CreateCOMRO(IKTComponentMgr componentMgr, IKTCfgDataSpace cfgDataSpace)
+{
+    return new ResFlyHeight(componentMgr, cfgDataSpace);
+}
+```
+
+## Example 2
