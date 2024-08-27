@@ -274,3 +274,25 @@ public Com.IComResFlyHeight CreateCOMRO(IKTComponentMgr componentMgr, IKTCfgData
 ```
 
 ## Example 2
+```
+CComPtr <IKTPersistenceAgent> pa = nullptr;
+HRESULT hr = pa.CoCreateInstance(_T("SPX.DFNorm.PA"));
+
+VARIANT_BOOL vb;
+hr = pa->raw_IsUpgradeRequired(NULL, NULL, &vb);
+```
+The above code is based on the below c# code
+```
+ [ComVisible(true)]
+ [ComDefaultInterface(typeof(IKTPersistenceAgent))]
+ [ClassInterface(ClassInterfaceType.None)]
+ [Guid("588F24B2-7D78-4B94-ACE3-8810ABEDCF9E")]
+ [ProgId("SPX.DFNorm.PA")]
+ public class DFNormPAAdapter : IKTPersistenceAgent
+ {
+    public bool IsUpgradeRequired(IKTComponentMgr pIKTCompMgr, IKTCfgDataSpace pIKTCDS)
+    {
+       return GetDFNormPA(pIKTCompMgr, pIKTCDS).IsUpgradeRequired(_infra.CompMgr, _infra.Cds);
+    }
+}
+```
