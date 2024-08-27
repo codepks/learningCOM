@@ -202,3 +202,52 @@ To gnerate the .tlb file from the given .dll file we use this :
 ```
 "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools\x64\TlbExp.exe" /nologo ^ $(NGS_BIN)\$(ProjectName).dll ^ \out:$(NGS_BIN)\$(ProjectName).tlb
 ```
+
+# Understanding COM Code
+## Example 1
+```
+  1. CComPtr<IComResFlyHeightFactory> pROFactory;
+  2. hr = pROFactory.CoCreateInstance(L"SPX.FlyHeight.ROFactory"); 
+
+  3. CComQIPtr<IComResFlyHeight> pFlyHeightRO;
+  4. pFlyHeightRO = pROFactory->CreateCOMRO(NULL, NULL);
+```
+_Breaking the code_
+```
+  1. CComPtr<IComResFlyHeightFactory> pROFactory;
+```
+_The above code is written for the below given c# code_
+```
+    [ComVisible(true)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IComResFlyHeightFactory
+    {
+        IComResFlyHeight CreateCOMRO(IKTComponentMgr componentMgr, IKTCfgDataSpace cfgDataSpace);
+    }
+```
+1. COM visibility is necessary
+2. We hold the interface pointer in the `CComPtr<IComResFlyHeightFactory>`
+
+```
+ 2. hr = pROFactory.CoCreateInstance(L"SPX.FlyHeight.ROFactory");
+```
+_The above code is written for the below given c# code_
+```
+   [ComVisible(true)]
+   [ClassInterface(ClassInterfaceType.None)]
+   [ComDefaultInterface(typeof(Com.IComResFlyHeightFactory))]
+   [ProgId("SPX.FlyHeight.ROFactory")]
+   public class SpResFlyHeightFactory : Com.IComResFlyHeightFactory	{
+   public Com.IComResFlyHeight CreateCOMRO(IKTComponentMgr componentMgr, IKTCfgDataSpace cfgDataSpace)
+   {
+       return new ResFlyHeight(componentMgr, cfgDataSpace);
+   }
+}
+```
+1. The above code's ProgID is used to get the class instace
+2. Default interface is also defined for this class : ```[ComDefaultInterface(typeof(Com.IComResFlyHeightFactory))]```
+3. We are instantiating `IComResFlyHeightFactory` with `"SPX.FlyHeight.ROFactory"` which could have also used CLSID : `CLSID_SpResFlyHeightFactory`
+
+```
+ 3. CComQIPtr<IComResFlyHeight> pFlyHeightRO;
+```
